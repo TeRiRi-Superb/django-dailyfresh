@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/reset.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    {% block css %}{% endblock %}
+</head>
+<body>
+<div class="header_con">
+		<div class="header">
+			<div class="welcome fl">欢迎来到天天生鲜!</div>
+			<div class="fr">
+
+				{% if user.is_authenticated %}
+             <div class="user_link fl">
+                <a href="{% url 'user:userinfo' %}">欢迎您：{{user.username}}</a>
+                <span>|</span>
+                    <a href="{% url 'user:logout' %}">退出</a>
+                <span>|</span>
+                <a href="{% url 'user:userinfo' %}">用户中心</a>
+                <span>|</span>
+                <a href="{% url 'cart:cart' %}">我的购物车</a>
+                <span>|</span>
+                <a href="{% url 'user:userorder' 1%}">我的订单</a>
+            </div>
+            {% else %}
+            <div class="login_btn fl">
+                <a href="{% url 'user:login' %}">登录</a>
+                <span>|</span>
+                <a href="{% url 'user:register' %}">注册</a>
+            </div>
+            {% endif %}
+
+			</div>
+		</div>
+	</div>
+    <div class="search_bar clearfix">
+    <a href="/goods/main" class="logo fl"><img src="{% static 'images/logo.png'%}"></a>
+    <form method='get' action="/search/" target="_blank">
+    <div class="search_con fl">
+        <input type="text" class="input_text fl" name="q" placeholder="搜索商品">
+        <input type="submit" class="input_btn fr" name="" value="搜索">
+    </div>
+    </form>
+
+
+    {% if user.is_authenticated %}
+  <div class="guest_cart fr">
+        <a href="#" class="cart_name fl">我的购物车</a>
+        <div class="goods_count fl" id="show_count">{{ cart_num }}</div>
+    </div>
+        {% else %}
+        <div class="guest_cart fr">
+            <a href="{% url 'user:login' %}" class="cart_name fl">我的购物车</a>
+        </div>
+    {% endif %}
+</div>
+    <div class="navbar_con">
+    <div class="navbar clearfix">
+        <div class="subnav_con fl">
+            <h1>全部商品分类</h1>
+            <span></span>
+            <ul class="subnav">
+                {% for type in types %}
+                    <li><a href="{% url 'goods:list' type.id 1%}" class="{{ type.logo }}">{{ type.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <ul class="navlist fl">
+            <li><a href="">首页</a></li>
+            <li class="interval">|</li>
+            <li><a href="">手机生鲜</a></li>
+            <li class="interval">|</li>
+            <li><a href="">抽奖</a></li>
+        </ul>
+    </div>
+</div>
+
+{% block detail %}
+{% endblock detail%}
+
+<div class="main_wrap clearfix">
+    <div class="l_wrap fl clearfix">
+        <div class="new_goods">
+            <h3>新品推荐</h3>
+            <ul>
+                {%for sk in sku_type%}
+                <li>
+                    <a href="{% url 'goods:detail' sk.id %}"><img src="{{ sk.image.url }}"></a>
+                    <h4><a href="{% url 'goods:detail' sk.id %}">{{sk.name}}</a></h4>
+                    <div class="prize">￥{{sk.price}}</div>
+                </li>
+                {%endfor%}
+            </ul>
+        </div>
+    </div>
+{% block list %}
+{% endblock list %}
+</div>
+    <div class="footer">
+		<div class="foot_link">
+			<a href="#">关于我们</a>
+			<span>|</span>
+			<a href="#">联系我们</a>
+			<span>|</span>
+			<a href="#">招聘人才</a>
+			<span>|</span>
+			<a href="#">友情链接</a>
+		</div>
+		<p>CopyRight © 2016 北京天天生鲜信息技术有限公司 All Rights Reserved</p>
+		<p>电话：010-****888    京ICP备*******8号</p>
+	</div>
+    <script src="{% static 'js/jquery1.11.0.js' %}"></script>
+    <script src="{% static 'js/jquery-ui.min.js' %}"></script>
+    {% block js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,5 @@
+#在目录“templates/search/indexes/应用名称/”下创建“模型类名称_text.txt”文件
+#这个数据模板的作用就是对Note.title, Note.user.get_full_name,Note.body这三个字段建立索引，当检索的时候会对这三个字段做全文检索匹配。
+{{ object.name }}
+{{ object.content }}
+{{ object.goods.content}}
